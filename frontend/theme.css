@@ -1,0 +1,511 @@
+/* QueueForge Nexus visual theme: aurora background, glass panels, pill buttons, and readable modern typography. */
+@property --qfn-a{syntax:'<color>';inherits:true;initial-value:#8b7cf6}
+@property --qfn-b{syntax:'<color>';inherits:true;initial-value:#38bdf8}
+:root{
+  --qfn-a:#8b7cf6;
+  --qfn-b:#38bdf8;
+  --radius:18px;
+  transition:--qfn-a 1.4s ease,--qfn-b 1.4s ease;
+  font-size: 15px;
+}
+
+body {
+  font-size: 15px !important;
+  line-height: 1.55;
+  -webkit-font-smoothing: antialiased;
+}
+
+body::before{
+  content:"";position:fixed;inset:-10%;z-index:-1;pointer-events:none;
+  background:radial-gradient(900px 620px at 8% -8%,color-mix(in srgb,var(--qfn-a) 30%,transparent),transparent 62%),
+  radial-gradient(820px 600px at 100% 6%,color-mix(in srgb,var(--qfn-b) 24%,transparent),transparent 62%),
+  radial-gradient(760px 520px at 50% 112%,color-mix(in srgb,var(--qfn-a) 16%,transparent),transparent 65%);
+  animation:qfn-drift 32s ease-in-out infinite alternate
+}
+@keyframes qfn-drift{to{transform:translate3d(-2%,2.5%,0) scale(1.06)}}
+
+.app-shell,.main-area,.page-scroll{background:transparent!important}
+.sidebar,.topbar{background:color-mix(in srgb,var(--side-bg) 62%,transparent)!important;backdrop-filter:blur(20px) saturate(140%);-webkit-backdrop-filter:blur(20px) saturate(140%)}
+.panel,.metric,.workflow-card,.worker-card,.nx-panel{background:linear-gradient(160deg,color-mix(in srgb,var(--surface) 80%,transparent),color-mix(in srgb,var(--surface2) 62%,transparent))!important;backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border:1px solid color-mix(in srgb,var(--qfn-a) 16%,var(--border))!important;border-radius:20px!important;box-shadow:0 10px 36px #0003;transition:transform .25s var(--nx-ease,ease),border-color .25s,box-shadow .25s}
+.metric:hover,.worker-card:hover,.workflow-card:hover{transform:translateY(-3px);border-color:color-mix(in srgb,var(--qfn-a) 55%,var(--border))!important;box-shadow:0 18px 48px #0004,0 0 0 1px color-mix(in srgb,var(--qfn-a) 25%,transparent)}
+
+/* --- Enhanced Readable Typography & Component Sizing --- */
+
+/* Sidebar */
+.sidebar {
+  width: 260px !important;
+  flex: 0 0 260px !important;
+  padding: 22px 16px 16px !important;
+}
+.brand-title {
+  font-size: 19px !important;
+  letter-spacing: -0.5px !important;
+}
+.brand-caption {
+  font-size: 11px !important;
+  letter-spacing: 1.2px !important;
+  margin-top: 4px;
+}
+.ws-title b {
+  font-size: 13.5px !important;
+}
+.ws-title small {
+  font-size: 11.5px !important;
+}
+.env {
+  font-size: 11.5px !important;
+  letter-spacing: 0.6px !important;
+  padding: 10px 9px 20px !important;
+}
+.env small {
+  font-size: 11px !important;
+}
+.nav-label {
+  font-size: 11.5px !important;
+  font-weight: 700 !important;
+  letter-spacing: 1.1px !important;
+  padding: 0 12px 10px !important;
+}
+.nav-link {
+  height: 42px !important;
+  font-size: 13.5px !important;
+  padding: 0 14px !important;
+  gap: 12px !important;
+}
+.nav-count {
+  font-size: 11px !important;
+  padding: 3px 7px !important;
+}
+.usage-top {
+  font-size: 12px !important;
+}
+.usage-top b {
+  font-size: 12.5px !important;
+}
+.usage-number {
+  font-size: 13px !important;
+}
+.usage-number span {
+  font-size: 12px !important;
+}
+.usage-link {
+  font-size: 12px !important;
+}
+.profile-meta b {
+  font-size: 13px !important;
+}
+.profile-meta small {
+  font-size: 11.5px !important;
+}
+
+/* Topbar & Breadcrumbs */
+.topbar {
+  height: 68px !important;
+  padding: 0 32px !important;
+}
+.crumb {
+  font-size: 13px !important;
+}
+.api-indicator {
+  font-size: 12.5px !important;
+  padding: 6px 12px !important;
+}
+kbd {
+  font-size: 11.5px !important;
+  padding: 3px 6px !important;
+}
+
+/* Page Heading & Eyebrow */
+.eyebrow {
+  font-size: 11.5px !important;
+  letter-spacing: 0.9px !important;
+  margin-bottom: 12px !important;
+}
+.page-heading h1 {
+  font-size: calc(30px * var(--site-heading-scale)) !important;
+  letter-spacing: -0.9px !important;
+}
+.page-subtitle {
+  font-size: 14px !important;
+  line-height: 1.6 !important;
+  margin-top: 8px !important;
+}
+.updated {
+  font-size: 12px !important;
+}
+
+/* Buttons */
+.btn {
+  border-radius: 999px !important;
+  padding: 9px 18px !important;
+  font-size: 13px !important;
+  font-weight: 600 !important;
+  position: relative;
+  overflow: hidden;
+  transition: transform .2s var(--nx-ease,ease),box-shadow .25s,background .25s,border-color .25s,filter .25s;
+}
+.btn:hover{transform:translateY(-2px)}
+.btn:active{transform:translateY(0) scale(.97)}
+.btn-primary{background:linear-gradient(135deg,var(--qfn-a),var(--qfn-b))!important;border-color:transparent!important;box-shadow:0 8px 24px color-mix(in srgb,var(--qfn-a) 38%,transparent)}
+.btn-primary::after{content:"";position:absolute;inset:0;background:linear-gradient(110deg,transparent 30%,#fff5 50%,transparent 70%);transform:translateX(-120%);transition:transform .6s}
+.btn-primary:hover{box-shadow:0 12px 34px color-mix(in srgb,var(--qfn-a) 55%,transparent);filter:saturate(1.15)}.btn-primary:hover::after{transform:translateX(120%)}
+.btn-secondary{background:color-mix(in srgb,var(--surface2) 70%,transparent)!important}
+.btn-secondary:hover{border-color:var(--qfn-a)!important;background:color-mix(in srgb,var(--qfn-a) 16%,var(--surface2))!important;box-shadow:0 8px 22px color-mix(in srgb,var(--qfn-a) 22%,transparent)}
+.btn-small {
+  padding: 7px 13px !important;
+  font-size: 12px !important;
+}
+.icon-button{border-radius:999px!important;transition:all .2s}.icon-button:hover{background:color-mix(in srgb,var(--qfn-a) 18%,transparent)!important;transform:translateY(-1px)}
+.nav-link{border-radius:14px!important}.nav-link:hover{background:color-mix(in srgb,var(--qfn-a) 14%,transparent)!important;color:var(--text)!important;transform:translateX(3px)}
+.nav-link.active,.nav-link[aria-current="page"]{background:linear-gradient(90deg,color-mix(in srgb,var(--qfn-a) 30%,transparent),color-mix(in srgb,var(--qfn-b) 10%,transparent))!important;color:var(--text)!important;border-color:color-mix(in srgb,var(--qfn-a) 45%,transparent)!important;box-shadow:0 6px 20px color-mix(in srgb,var(--qfn-a) 22%,transparent)}
+
+/* Metrics Cards */
+.metric {
+  padding: 18px 20px 16px !important;
+}
+.metric-label {
+  font-size: 13px !important;
+  font-weight: 500;
+  margin-top: 14px !important;
+}
+.metric-value {
+  font-size: 28px !important;
+  letter-spacing: -0.6px !important;
+  margin-top: 4px !important;
+}
+.metric-bottom {
+  font-size: 12.5px !important;
+  margin-top: 8px !important;
+}
+.trend {
+  font-size: 12px !important;
+  font-weight: 600;
+}
+.metric-note {
+  font-size: 12px !important;
+}
+
+/* Panels & Headers */
+.panel-head {
+  padding: 18px 22px 16px !important;
+}
+.panel-head h2 {
+  font-size: 16px !important;
+  font-weight: 700 !important;
+  letter-spacing: -0.2px !important;
+}
+.panel-head p {
+  font-size: 13px !important;
+  line-height: 1.5 !important;
+}
+.chart-total {
+  font-size: 24px !important;
+}
+.chart-total span {
+  font-size: 13px !important;
+}
+.chart-caption {
+  font-size: 12px !important;
+}
+.chart-peak span {
+  font-size: 12px !important;
+}
+.chart-peak b {
+  font-size: 13.5px !important;
+}
+.chart-footer {
+  font-size: 12.5px !important;
+}
+.legend {
+  font-size: 12px !important;
+}
+.select-small {
+  font-size: 12px !important;
+  padding: 7px 11px !important;
+}
+
+/* System Health */
+.health-overall {
+  font-size: 12px !important;
+  padding: 6px 12px !important;
+}
+.health-copy b {
+  font-size: 14px !important;
+  margin-bottom: 3px !important;
+}
+.health-copy span {
+  font-size: 12.5px !important;
+}
+.latency b {
+  font-size: 13px !important;
+}
+.latency span {
+  font-size: 11.5px !important;
+}
+.text-link {
+  font-size: 13px !important;
+  padding: 12px 20px 16px !important;
+}
+
+/* Tables (Jobs, Audit, etc.) */
+.jobs-table thead th {
+  height: 42px !important;
+  font-size: 11.5px !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.6px !important;
+  padding: 0 14px !important;
+}
+.jobs-table th:first-child, .jobs-table td:first-child {
+  padding-left: 22px !important;
+}
+.jobs-table td {
+  padding: 13px 14px !important;
+  font-size: 13.5px !important;
+}
+.job-cell b {
+  font-size: 14px !important;
+  font-weight: 600 !important;
+  margin-bottom: 4px !important;
+}
+.job-cell small {
+  font-size: 12px !important;
+}
+.queue-chip {
+  font-size: 12px !important;
+  padding: 5px 9px !important;
+  border-radius: 6px !important;
+}
+.attempts {
+  font-size: 13px !important;
+}
+.time-cell, .worker-cell {
+  font-size: 12.5px !important;
+}
+
+/* Status Badges */
+.status {
+  border-radius: 999px !important;
+  padding: 5px 11px !important;
+  font-size: 12px !important;
+  font-weight: 600 !important;
+  letter-spacing: 0.3px !important;
+}
+
+/* Filter Tabs & Search Box */
+.filter-tabs button {
+  font-size: 13px !important;
+  padding: 9px 14px !important;
+}
+.filter-tabs button span {
+  font-size: 11.5px !important;
+  padding: 3px 7px !important;
+}
+.search-box {
+  height: 38px !important;
+  padding: 0 13px !important;
+}
+.search-box input {
+  font-size: 13px !important;
+}
+.result-line {
+  font-size: 12.5px !important;
+  padding: 14px 20px !important;
+}
+.result-line b {
+  font-size: 13px !important;
+}
+
+/* Workflows & Nodes */
+.workflow-card h3 {
+  font-size: 16px !important;
+}
+.workflow-card p {
+  font-size: 13px !important;
+  line-height: 1.6 !important;
+}
+.workflow-nodes span {
+  width: 26px !important;
+  height: 26px !important;
+  font-size: 11.5px !important;
+}
+.wf-stats span {
+  font-size: 11.5px !important;
+}
+.wf-stats b {
+  font-size: 15px !important;
+}
+.dag-node {
+  width: 175px !important;
+  min-height: 72px !important;
+  padding: 12px 14px !important;
+}
+.dag-node b {
+  font-size: 13px !important;
+}
+.dag-node small {
+  font-size: 11px !important;
+  margin: 6px 0 0 28px !important;
+}
+.flow-node b {
+  font-size: 12.5px !important;
+}
+.flow-node small {
+  font-size: 11px !important;
+}
+
+/* Workers View */
+.section-title {
+  font-size: 17px !important;
+}
+.workers-toolbar p {
+  font-size: 13px !important;
+}
+.count-chip {
+  font-size: 12px !important;
+  padding: 4px 8px !important;
+}
+.worker-card h3 {
+  font-size: 14px !important;
+}
+.worker-card > p {
+  font-size: 12px !important;
+}
+.worker-meters span {
+  font-size: 11.5px !important;
+}
+.worker-meters b {
+  font-size: 13.5px !important;
+}
+.worker-foot {
+  font-size: 11.5px !important;
+}
+
+/* Observability & Stats */
+.obs-tile > span {
+  font-size: 13px !important;
+}
+.obs-tile b {
+  font-size: 26px !important;
+}
+.obs-tile small {
+  font-size: 12px !important;
+}
+
+/* Tenants & Settings */
+.tenant-copy b {
+  font-size: 14px !important;
+}
+.tenant-copy span {
+  font-size: 12.5px !important;
+}
+.tenant-plan {
+  font-size: 11.5px !important;
+  padding: 5px 8px !important;
+}
+.tenant-usage {
+  font-size: 13px !important;
+}
+.setting-line b {
+  font-size: 13.5px !important;
+}
+.setting-line span {
+  font-size: 12.5px !important;
+}
+.setting-line code {
+  font-size: 12.5px !important;
+}
+
+/* Inputs & Modals */
+input,select,textarea{
+  border-radius:12px!important;
+  font-size: 13.5px !important;
+  padding: 10px 13px !important;
+  transition:border-color .2s,box-shadow .2s;
+}
+input:focus,select:focus,textarea:focus{outline:none;border-color:var(--qfn-a)!important;box-shadow:0 0 0 4px color-mix(in srgb,var(--qfn-a) 22%,transparent)}
+tbody tr{transition:background .18s}tbody tr:hover{background:color-mix(in srgb,var(--qfn-a) 9%,transparent)}
+.modal,.drawer,.nexus-dialog{background:color-mix(in srgb,var(--surface) 88%,transparent)!important;backdrop-filter:blur(24px);-webkit-backdrop-filter:blur(24px);border-radius:24px}
+.drawer{border-radius:24px 0 0 24px}
+.modal-head h2, .drawer-head h2 {
+  font-size: 21px !important;
+}
+.modal-head p {
+  font-size: 13px !important;
+}
+.modal-kicker {
+  font-size: 11.5px !important;
+}
+.modal-body label {
+  font-size: 13px !important;
+}
+.modal-body input, .modal-body select, .modal-body textarea {
+  font-size: 13.5px !important;
+}
+.modal-tip {
+  font-size: 12.5px !important;
+}
+.detail-id-row b {
+  font-size: 15px !important;
+}
+.detail-id-row code {
+  font-size: 12.5px !important;
+}
+.detail-status {
+  font-size: 13px !important;
+}
+.detail-grid span {
+  font-size: 12px !important;
+}
+.detail-grid b {
+  font-size: 13.5px !important;
+}
+.error-callout b {
+  font-size: 13px !important;
+}
+.error-callout p {
+  font-size: 12.5px !important;
+}
+.drawer-section h3 {
+  font-size: 14.5px !important;
+}
+.drawer-section pre {
+  font-size: 12.5px !important;
+}
+.attempt-content b {
+  font-size: 13.5px !important;
+}
+.attempt-content span {
+  font-size: 12px !important;
+}
+.toast {
+  font-size: 13.5px !important;
+  padding: 14px 18px !important;
+}
+.section-note b {
+  font-size: 13.5px !important;
+}
+.section-note span {
+  font-size: 12.5px !important;
+}
+.footer {
+  font-size: 12px !important;
+}
+.footer b {
+  font-size: 12px !important;
+}
+.footer button {
+  font-size: 12px !important;
+}
+
+#page-title{background:linear-gradient(90deg,var(--text) 35%,var(--qfn-a),var(--qfn-b));-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
+.top-avatar{background:linear-gradient(135deg,var(--qfn-a),var(--qfn-b))!important;color:#fff!important;box-shadow:0 4px 16px color-mix(in srgb,var(--qfn-a) 40%,transparent)}
+.api-indicator{border-radius:999px!important;background:color-mix(in srgb,var(--qfn-a) 10%,transparent)!important}
+*{scrollbar-width:thin;scrollbar-color:color-mix(in srgb,var(--qfn-a) 45%,transparent) transparent}
+.qfn-themes{display:flex;align-items:center;gap:6px;padding:4px 7px;border-radius:999px;background:color-mix(in srgb,var(--surface2) 60%,transparent);border:1px solid var(--border)}
+.qfn-sw{width:16px;height:16px;border-radius:50%;border:2px solid transparent;cursor:pointer;padding:0;transition:transform .2s,box-shadow .2s}
+.qfn-sw:hover{transform:scale(1.25)}.qfn-sw.on{box-shadow:0 0 0 2px var(--surface),0 0 0 4px var(--qfn-a)}
+.qfn-auto{font-size:12px;line-height:1;border:0;background:transparent;color:var(--subtext);cursor:pointer;border-radius:50%;width:20px;height:20px}
+.qfn-auto.on{color:var(--qfn-a);animation:qfn-spin 4s linear infinite}@keyframes qfn-spin{to{transform:rotate(360deg)}}
+@media(max-width:1100px){.qfn-themes{display:none}}
+@media(prefers-reduced-motion:reduce){body::before,.qfn-auto.on{animation:none}.btn,.metric,.nav-link{transition:none}}
+@media(prefers-color-scheme:light){.workspace,.workspace *{color:var(--text)!important}.workspace small,.workspace span{color:var(--subtext)!important}}

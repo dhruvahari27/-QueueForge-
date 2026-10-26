@@ -1,0 +1,89 @@
+name: queueforge-nexus
+services:
+  db:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:-queueforge}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-change-this-local-development-password}
+      POSTGRES_DB: ${POSTGRES_DB:-queueforge}
+    volumes:
+      - queueforge-postgres:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-queueforge} -d ${POSTGRES_DB:-queueforge}"]
+      interval: 5s
+      timeout: 3s
+      retries: 20
+    restart: unless-stopped
+
+  redis:
+    image: redis:7-alpine
+    command: ["redis-server", "--save", "60", "1", "--loglevel", "warning"]
+    volumes:
+      - queueforge-redis:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+    restart: unless-stopped
+    # Redis is reserved for future rate limits/notifications; PostgreSQL currently owns job state.
+
+  api:
+    build: ./backend
+    command: ["sh", "-c", "alembic upgrade head && uvicorn app.main:app --host 0.0.0.0 --port 8000 --proxy-headers"]
+    environment:
+      APP_ENV: ${APP_ENV:-development}
+      DATABASE_URL: postgresql+psycopg://${POSTGRES_USER:-queueforge}:${POSTGRES_PASSWORD:-change-this-local-development-password}@db:5432/${POSTGRES_DB:-queueforge}
+      AUTH_ENABLED: ${AUTH_ENABLED:-false}
+      AUTO_CREATE_SCHEMA: "false"
+      BOOTSTRAP_API_KEY: ${BOOTSTRAP_API_KEY:-}
+      DEFAULT_TENANT_ID: ${DEFAULT_TENANT_ID:-demo}
+      DEFAULT_TENANT_NAME: ${DEFAULT_TENANT_NAME:-Nexus Labs}
+      CORS_ORIGINS: ${CORS_ORIGINS:-http://localhost:5173,http://127.0.0.1:5173}
+      LEASE_SECONDS: ${LEASE_SECONDS:-30}
+      MAX_PAYLOAD_BYTES: ${MAX_PAYLOAD_BYTES:-65536}
+      MAX_SLEEP_SECONDS: ${MAX_SLEEP_SECONDS:-15}
+    ports:
+      - "127.0.0.1:8000:8000"
+    depends_on:
+      db:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://localhost:8000/api/health', timeout=3)"]
+      interval: 10s
+      timeout: 4s
+      retries: 10
+      start_period: 15s
+    restart: unless-stopped
+
+  worker:
+    build: ./backend
+    command: ["python", "-m", "app.worker", "--worker-id", "worker-compose-01", "--poll", "0.7"]
+    environment:
+      APP_ENV: ${APP_ENV:-development}
+      DATABASE_URL: postgresql+psycopg://${POSTGRES_USER:-queueforge}:${POSTGRES_PASSWORD:-change-this-local-development-password}@db:5432/${POSTGRES_DB:-queueforge}
+      AUTH_ENABLED: ${AUTH_ENABLED:-false}
+      AUTO_CREATE_SCHEMA: "false"
+      BOOTSTRAP_API_KEY: ${BOOTSTRAP_API_KEY:-}
+      DEFAULT_TENANT_ID: ${DEFAULT_TENANT_ID:-demo}
+      DEFAULT_TENANT_NAME: ${DEFAULT_TENANT_NAME:-Nexus Labs}
+      LEASE_SECONDS: ${LEASE_SECONDS:-30}
+      MAX_PAYLOAD_BYTES: ${MAX_PAYLOAD_BYTES:-65536}
+      MAX_SLEEP_SECONDS: ${MAX_SLEEP_SECONDS:-15}
+    depends_on:
+      api:
+        condition: service_healthy
+    restart: unless-stopped
+
+  frontend:
+    build: ./frontend
+    ports:
+      - "127.0.0.1:5173:80"
+    depends_on:
+      api:
+        condition: service_healthy
+    restart: unless-stopped
+
+volumes:
+  queueforge-postgres:
+  queueforge-redis:
