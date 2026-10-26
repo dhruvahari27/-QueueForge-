@@ -10,5 +10,7 @@ services:
         value: development
       - key: MODE
         value: all
+      - key: DATABASE_URL
+        value: sqlite:///./queueforge.db
       - key: AUTO_CREATE_SCHEMA
         value: "true"
