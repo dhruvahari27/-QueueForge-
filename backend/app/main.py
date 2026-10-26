@@ -449,3 +449,20 @@ def revoke_api_key(key_id: str, db: Session = Depends(get_db), principal: Princi
 @app.get("/api/", tags=["system"])
 def api_root():
     return {"name": "QueueForge Nexus API", "version": app.version, "docs": "/docs", "health": "/api/health"}
+
+
+# Mount static operations console if available
+try:
+    from fastapi.staticfiles import StaticFiles
+
+    _frontend_paths = [
+        os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "..", "frontend")),
+        os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "frontend")),
+        os.path.abspath("/app/frontend"),
+    ]
+    for _candidate in _frontend_paths:
+        if os.path.isdir(_candidate) and os.path.exists(os.path.join(_candidate, "index.html")):
+            app.mount("/", StaticFiles(directory=_candidate, html=True), name="frontend")
+            break
+except Exception:
+    pass

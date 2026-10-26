@@ -11,6 +11,8 @@ if config.config_file_name is not None:
     fileConfig(config.config_file_name)
 url = os.getenv("DATABASE_URL")
 if url:
+    from app.database import normalize_database_url
+    url = normalize_database_url(url)
     config.set_main_option("sqlalchemy.url", url.replace("%", "%%"))
 target_metadata = Base.metadata
 

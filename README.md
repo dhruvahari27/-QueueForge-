@@ -115,6 +115,20 @@ Stop the stack at any time with `docker compose down`.
 
 ---
 
+### Option 3: Deploy to Railway 🚂
+
+Deploy QueueForge Nexus to [Railway](https://railway.app) in 3 simple steps:
+
+1. **Deploy from GitHub**: Go to [railway.app](https://railway.app), click **+ New Project** &rarr; **Deploy from GitHub repo** &rarr; select `dhruvahari27/-QueueForge-`.
+2. **Add PostgreSQL**: Click **+ New** &rarr; **Database** &rarr; **Add PostgreSQL**.
+3. **Connect & Expose**:
+   - In your QueueForge service **Variables**, link `DATABASE_URL` to `${{Postgres.DATABASE_URL}}`.
+   - In **Settings** &rarr; **Networking**, click **Generate Domain**.
+
+For detailed instructions and scaling options, see [**docs/RAILWAY_DEPLOYMENT.md**](docs/RAILWAY_DEPLOYMENT.md).
+
+---
+
 ## 📡 REST API Reference
 
 The FastAPI Control Plane provides a RESTful interface documented with OpenAPI v3:
