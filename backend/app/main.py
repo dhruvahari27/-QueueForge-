@@ -3,6 +3,7 @@ from __future__ import annotations
 
 import json
 import logging
+import os
 import secrets
 import re
 import time
@@ -451,18 +452,42 @@ def api_root():
     return {"name": "QueueForge Nexus API", "version": app.version, "docs": "/docs", "health": "/api/health"}
 
 
-# Mount static operations console if available
-try:
-    from fastapi.staticfiles import StaticFiles
+# Serve static operations console
+import mimetypes
+from fastapi.responses import FileResponse
 
-    _frontend_paths = [
-        os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "..", "frontend")),
-        os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "frontend")),
-        os.path.abspath("/app/frontend"),
-    ]
-    for _candidate in _frontend_paths:
-        if os.path.isdir(_candidate) and os.path.exists(os.path.join(_candidate, "index.html")):
-            app.mount("/", StaticFiles(directory=_candidate, html=True), name="frontend")
-            break
-except Exception:
-    pass
+_frontend_candidates = [
+    os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "..", "frontend")),
+    os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "frontend")),
+    os.path.abspath("frontend"),
+    os.path.abspath("/app/frontend"),
+]
+
+
+def _find_frontend_dir() -> str | None:
+    for p in _frontend_candidates:
+        if os.path.isdir(p) and os.path.exists(os.path.join(p, "index.html")):
+            return p
+    return None
+
+
+_FRONTEND_DIR = _find_frontend_dir()
+
+
+@app.get("/", include_in_schema=False)
+def serve_root():
+    if _FRONTEND_DIR:
+        return FileResponse(os.path.join(_FRONTEND_DIR, "index.html"), media_type="text/html")
+    return {"name": "QueueForge Nexus API", "version": app.version, "docs": "/docs", "health": "/api/health"}
+
+
+@app.get("/{full_path:path}", include_in_schema=False)
+def serve_static(full_path: str):
+    if full_path.startswith("api/") or full_path in ("docs", "redoc", "openapi.json"):
+        raise HTTPException(status_code=404, detail="Not found")
+    if _FRONTEND_DIR:
+        file_path = os.path.join(_FRONTEND_DIR, full_path)
+        if os.path.isfile(file_path):
+            mime, _ = mimetypes.guess_type(file_path)
+            return FileResponse(file_path, media_type=mime or "application/octet-stream")
+    raise HTTPException(status_code=404, detail="Not found")

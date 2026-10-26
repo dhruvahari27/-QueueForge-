@@ -8,7 +8,8 @@ case "$DATABASE_URL" in
     alembic upgrade head || echo "[QueueForge] Migration completed or skipped."
     ;;
   * )
-    echo "[QueueForge] Running with built-in SQLite engine (schema auto-managed)."
+    echo "[QueueForge] Running with built-in SQLite engine (schema auto-managed)..."
+    python -c "from app.main import initialize_database; initialize_database()" || echo "[QueueForge] Pre-init completed."
     ;;
 esac
 

@@ -47,6 +47,9 @@ def heartbeat_thread(worker_id: str):
 def serve(worker_id: str, poll_seconds: float) -> None:
     signal.signal(signal.SIGINT, _handle_signal)
     signal.signal(signal.SIGTERM, _handle_signal)
+    if settings.auto_create_schema:
+        from .database import Base, engine
+        Base.metadata.create_all(bind=engine)
     db = SessionLocal()
     try:
         ensure_worker(db, worker_id)
