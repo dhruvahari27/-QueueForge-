@@ -115,7 +115,22 @@ Stop the stack at any time with `docker compose down`.
 
 ---
 
-### Option 3: Deploy to Railway 🚂
+### Option 3: Deploy to Render (Free Tier Blueprint) 🚀
+
+Deploy QueueForge Nexus to [Render](https://render.com) using the included Infrastructure-as-Code Blueprint (`render.yaml`):
+
+1. Go to [render.com](https://render.com) and click **New +** &rarr; **Blueprint**.
+2. Connect your GitHub repository: `dhruvahari27/-QueueForge-`.
+3. Click **Apply**. Render will automatically provision:
+   - Managed **PostgreSQL 16** database (Free plan).
+   - Docker **Web Service** running the FastAPI control plane + background workers + web console.
+   - Live HTTPS URL with automatic SSL.
+
+For complete manual setup options, see [**docs/RENDER_DEPLOYMENT.md**](docs/RENDER_DEPLOYMENT.md).
+
+---
+
+### Option 4: Deploy to Railway 🚂
 
 Deploy QueueForge Nexus to [Railway](https://railway.app) in 3 simple steps:
 
